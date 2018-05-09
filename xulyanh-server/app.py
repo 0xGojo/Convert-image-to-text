@@ -11,6 +11,7 @@ import re
 from docx   import Document
 from pytesseract import pytesseract
 from werkzeug.utils import secure_filename
+import enchant
 
 app = Flask(__name__)
 CORS(app)
@@ -41,6 +42,7 @@ def api_process_image():
         data = np.fromstring(in_memory_file.getvalue(), dtype=np.uint8)
         color_image_flag = 1
         img_opencv = cv2.imdecode(data, color_image_flag)
+        us_dict = enchant.Dict("en_US")
         result_text = convert_imge_text(img_opencv)
         img_name = secure_filename(img_name)
         create_new_folder(app.config['UPLOAD_FOLDER'])
@@ -49,8 +51,18 @@ def api_process_image():
         # print(result_text)
         result_array = result_text.split('\n')
         for textLine in result_array:
-            textLine = re.sub(r'[^\x00-\x7F+|x0c]', ' ', textLine)
-            document.add_paragraph(textLine)
+            p = document.add_paragraph('')
+            word_array = textLine.split(' ')
+            for word in word_array:
+                if not word:
+                    continue
+                if us_dict.check(word):
+                    p.add_run(word)
+                    p.add_run(' ')
+                else:
+                    p.add_run(word).bold = True
+                    p.add_run(' ')
+            # document.add_paragraph(textLine)
         saved_path = os.path.join(app.config['UPLOAD_FOLDER'], img_name.split('.')[0] + ".docx")
         document.save(saved_path)
         app.logger.info("saving {}".format(saved_path))
