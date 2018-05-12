@@ -142,3 +142,62 @@ input[type=submit]:active {
     box-shadow: inset 0 0 1px 1px #e3e3e3;
     color: #000;
 }
+/* .upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+  
+.btn {
+    border: 2px solid gray;
+    color: gray;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+} */
+/* .btn:hover{
+    background-color: red !important;
+    color:wheat;
+} */
+/* .btn:hover {background-color: #e7e7e7;} */
+
+  
+/* .upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+} */
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.inputfile + label {
+	width: 120px;
+	height: 18px;
+    font-size: 1.25em;
+    font-weight: 700;
+    color: black;
+    background-color: white;
+    display: inline-block;
+    padding: 15px;
+    border: 2px solid gray;
+    border-radius: 10px;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+    color: white;
+}
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}

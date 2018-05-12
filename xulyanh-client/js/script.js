@@ -1,5 +1,5 @@
-var crop_max_width = 600;
-var crop_max_height = 600;
+var crop_max_width = 800;
+var crop_max_height = 800;
 var jcrop_api;
 var canvas;
 var context;
