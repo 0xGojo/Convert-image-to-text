@@ -205,6 +205,7 @@ $("#form").submit(function(e) {
   e.preventDefault();
   document.getElementById("waitting-icon").style = "display:inline-block";
   document.getElementById("download_file").style = "display:none";
+  document.getElementById("submit-button").disabled = true;
   var filename = $('#file').val().split('\\');
   var formData = new FormData($(this)[0]);
   var blob = dataURLtoBlob(canvas.toDataURL('image/png'));
@@ -226,6 +227,7 @@ $("#form").submit(function(e) {
             setTempData(data.filename);
             document.getElementById("download_file").style = "display:inline-block";
             document.getElementById("waitting-icon").style = "display:none";
+            document.getElementById("submit-button").disabled = false;
             document.getElementById("download_file").addEventListener('click', function () {
                 downloadfile();
             });
@@ -233,7 +235,8 @@ $("#form").submit(function(e) {
     },
     error: function(data) {
         console.log(data);
-        document.getElementById("waitting-icon").style = "display:none";
+        document.getElementById("submit-button").style = "disable:true";
+        document.getElementById("waitting-icon").disabled = false;
       alert("Error");
     },
     complete: function(data) {

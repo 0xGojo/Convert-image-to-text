@@ -32,11 +32,6 @@
                     <input type="hidden" id="y2" name="y2" />
 
                     <h2>Step1: Please select image file</h2>
-                    <!-- <div class="upload-btn-wrapper">
-                        <input type="file" name="image_file" id="file"/>
-                        <button class="btn">Upload a file</button>
-                    </div> -->
-                    <!-- <div><input type="file" name="image_file" id="file"/></div> -->
                     <div>
                             <input type="file" name="file" id="file" class="inputfile" />
                             <label for="file">Choose a file</label>
@@ -55,11 +50,16 @@
                             <label>Height</label> <input type="text" id="h" name="h" readonly/>
                         </div>
                         <div class="edit-image">
+
                             <button id="cropbutton" type="button">Crop</button>
                             <button id="rotatebutton" type="button">Rotate</button>
                             <button id="hflipbutton" type="button">H-flip</button>
                             <button id="vflipbutton" type="button">V-flip</button>
-                            <input type="submit" value="Upload" />
+                            <!--<select>-->
+                              <!--<option value="en">English</option>-->
+                              <!--<option value="vie">Vietnamese</option>-->
+                            <!--</select>-->
+                            <input id="submit-button" type="submit" value="Upload" />
                             <img id="waitting-icon" src="waitting.gif" />
                         </div>
                         <button id="download_file" type="button">Download file</button>

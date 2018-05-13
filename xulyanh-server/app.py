@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 import os.path
 import io
-import re
+# import re
 from docx   import Document
 from pytesseract import pytesseract
 from werkzeug.utils import secure_filename
@@ -160,6 +160,7 @@ def convert_imge_text(input_img):
 
         if ((w_ * h_) > ((img_x * img_y) / 5)) or ((w_ * h_) < 15):
             if DEBUG:
+                print(w_, h_)
                 print("\t debug=> size is invalid")
             return False
 
@@ -167,21 +168,23 @@ def convert_imge_text(input_img):
 
 
     def include_box(index, h_, contour):
-        if DEBUG:
+        if DEBUG == 0 and index == 109:
             print(str(index) + ":")
+            print(count_children(index, h_, contour))
             if is_child(index, h_):
                 print("\tIs a child")
                 print("\tparent " + str(get_parent(index, h_)) + " has " + str(
                     count_children(get_parent(index, h_), h_, contour)) + " children")
                 print("\thas " + str(count_children(index, h_, contour)) + " children")
 
-        if is_child(index, h_) and count_children(get_parent(index, h_), h_, contour) <= 3:
+        if is_child(index, h_) and count_children(get_parent(index, h_), h_, contour) <= 2:
             if DEBUG:
                 print("\t debug: is an interior to a letter")
             return False
 
-        if count_children(index, h_, contour) > 4:
-            if DEBUG:
+        if count_children(index, h_, contour) > 2:
+            if not DEBUG:
+                print(str(index) + ":")
                 print("\t debug: is a container of letters")
             return False
 
@@ -193,8 +196,8 @@ def convert_imge_text(input_img):
     kernel = np.ones((1, 1), np.uint8)
     # dilate_img = cv2.dilate(input_img, kernel, iterations=1)
     # final_img = cv2.erode(dilate_img, kernel, iterations=1)
-    increase_img = cv2.resize(input_img, None, fx=2.5, fy=2.5, interpolation=cv2.INTER_LINEAR)
-    dilate_img = cv2.dilate(increase_img, kernel, iterations=1)
+    # increase_img = cv2.resize(input_img, None, fx=2.5, fy=2.5, interpolation=cv2.INTER_LINEAR)
+    dilate_img = cv2.dilate(input_img, kernel, iterations=13)
     final_img = cv2.erode(dilate_img, kernel, iterations=1)
 
     img = cv2.copyMakeBorder(final_img, 50, 50, 50, 50, cv2.BORDER_CONSTANT)
@@ -216,13 +219,13 @@ def convert_imge_text(input_img):
     image, contours, hierarchy = cv2.findContours(edges.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     hierarchy = hierarchy[0]
-
+    print(hierarchy)
     if DEBUG:
         processed = edges.copy()
         rejected = edges.copy()
 
     keepers = []
-
+    # print(contours)
     for index_, contour_ in enumerate(contours):
         if DEBUG:
             print("Processing #%d" % index_)
@@ -278,6 +281,10 @@ def convert_imge_text(input_img):
                 ii(x_ + width, y_ + height + 1),
                 ii(x_ + width + 1, y_ + height)
             ]
+        for i in range(x_ + 1, x_ + width - 1):
+            # print(i)
+            bg_int.append(ii(i, y_ - 1))
+            bg_int.append(ii(i, y_ + height + 1))
         bg_int = np.median(bg_int)
 
         if DEBUG:
